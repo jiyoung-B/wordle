@@ -1,11 +1,25 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+
+answer = 'TRAIN'
+
+@app.get("/answer")
+def get_answer():
+    return {'answer' : answer}
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
+
+
 class Item(BaseModel):
     id:int
     content:str
 
-app = FastAPI()
+
 items = ['맥북', '애플워치', '아이폰', '에어팟']
 
 
@@ -35,3 +49,4 @@ def sayWelcome():
 def post_item(item:Item):
   items.append(item.content)
   return "성공했습니다."
+
